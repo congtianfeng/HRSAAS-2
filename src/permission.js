@@ -1,64 +1,14 @@
-// import router from './router'
-// import store from './store'
-// import { Message } from 'element-ui'
-// import NProgress from 'nprogress' // progress bar
-// import 'nprogress/nprogress.css' // progress bar style
-// import { getToken } from '@/utils/auth' // get token from cookie
-// import getPageTitle from '@/utils/get-page-title'
-
-// NProgress.configure({ showSpinner: false }) // NProgress Configuration
-
-// const whiteList = ['/login'] // no redirect whitelist
-
-// router.beforeEach(async(to, from, next) => {
-//   // start progress bar
-//   NProgress.start()
-
-//   // set page title
-//   document.title = getPageTitle(to.meta.title)
-
-//   // determine whether the user has logged in
-//   const hasToken = getToken()
-
-//   if (hasToken) {
-//     if (to.path === '/login') {
-//       // if is logged in, redirect to the home page
-//       next({ path: '/' })
-//       NProgress.done()
-//     } else {
-//       const hasGetUserInfo = store.getters.name
-//       if (hasGetUserInfo) {
-//         next()
-//       } else {
-//         try {
-//           // get user info
-//           await store.dispatch('user/getInfo')
-
-//           next()
-//         } catch (error) {
-//           // remove token and go to login page to re-login
-//           await store.dispatch('user/resetToken')
-//           Message.error(error || 'Has Error')
-//           next(`/login?redirect=${to.path}`)
-//           NProgress.done()
-//         }
-//       }
-//     }
-//   } else {
-//     /* has no token*/
-
-//     if (whiteList.indexOf(to.path) !== -1) {
-//       // in the free login whitelist, go directly
-//       next()
-//     } else {
-//       // other pages that do not have permission to access are redirected to the login page.
-//       next(`/login?redirect=${to.path}`)
-//       NProgress.done()
-//     }
-//   }
-// })
-
-// router.afterEach(() => {
-//   // finish progress bar
-//   NProgress.done()
-// })
+// 访问权限拦截设置
+import router from '@/router'
+import store from '@/store'
+const whiteList = ['/404', '/login']
+router.beforeEach((to, from, next) => {
+  //判断有无token
+  if (store.getters.token) {// 有token
+    if (to.path === '/login') next('/')// 有token还要去登录页强制跳转到主页
+    else { next() } //  有token去别的页面直接放行
+  } else {//  无token
+    if (whiteList.includes(to.path)) next()//  无token但是去的页面在白名单内，放行
+    else { next('/login') }//  无token但是去的页面也不在白名单内，强制跳转到登录页
+  }
+})

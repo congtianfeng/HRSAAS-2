@@ -68,7 +68,7 @@
 
 <script>
 import { validMobile } from "@/utils/validate";
-
+import { setItem } from "@/utils/auth";
 export default {
   name: "Login",
   data() {
@@ -115,7 +115,7 @@ export default {
   },
   methods: {
     showPwd() {
-      this.passwordType=this.passwordType==='password'?'':'password'
+      this.passwordType = this.passwordType === "password" ? "" : "password";
       this.$nextTick(() => {
         this.$refs.password.focus();
       });
@@ -127,15 +127,17 @@ export default {
           this.$store
             .dispatch("user/loginGetToken", this.loginForm)
             .then(() => {
-              this.$message.success('登录成功')
-              this.$router.push('/');
+              this.$message.success("登录成功");
+              this.$store.dispatch("user/asyncGetUserInfo");
+              this.$router.push("/");
+              setItem("timeKey", +new Date()); //  设置时间戳用于token失效的主动拦截
             })
             .catch(() => {
-              this.$message.error('登录失败')
+              this.$message.error("登录失败");
             });
-            this.loading = false;
+          this.loading = false;
         } else {
-          this.$message.error('手机号或密码格式不正确')
+          this.$message.error("手机号或密码格式不正确");
         }
       });
     },
@@ -239,7 +241,7 @@ $light_gray: #eee;
     width: 30px;
     display: inline-block;
   }
- 
+
   .title-container {
     position: relative;
 
