@@ -3,10 +3,10 @@ import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
 import router from '@/router'
 import { getItem } from '@/utils/auth'
-const timeStamp = 10 //定义token超时时间，单位为小时
+const timeStamp = 2 //定义token超时时间，单位为小时
 //  定义一个判断时间戳是否超时的函数
 const checkTimeKey = time => {
-  const isCheckTimeOut = (+new Date() - time) / 1000
+  const isCheckTimeOut = (+new Date() - time) / 1000 / 60 / 60
   return isCheckTimeOut > timeStamp
 }
 // create an axios instance
@@ -48,7 +48,7 @@ request.interceptors.response.use(res => {
       return Promise.reject(new Error('token超时,请重新登录'))
     }
     Message.error(err.message)
-    return Promise.reject(error)
+    return Promise.reject(err)
   }
 )
 
