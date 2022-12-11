@@ -2,12 +2,11 @@ import request from '@/utils/request'
 // 登录模块
 export const login = (data) => {
   return request({
-    method: 'POST',
+    method: 'post',
     url: '/sys/login',
     data
   })
 }
-
 
 /**
  *  获取用户的基本资料
