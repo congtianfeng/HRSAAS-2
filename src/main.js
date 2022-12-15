@@ -17,6 +17,8 @@ import '@/permission' // permission control
 import * as directives from '@/directives'
 import Component from '@/components'
 import * as filters from '@/filters'
+import checkPermissions from '@/mixin/checkpermissions'
+Vue.mixin(checkPermissions)
 //  统一全局注册过滤器
 Object.keys(filters).forEach(item => Vue.filter(item, filters[item]))
 //  统一注册自定义指令

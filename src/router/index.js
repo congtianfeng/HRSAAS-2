@@ -36,18 +36,17 @@ export const constantRoutes = [
       component: () => import('@/views/dashboard/index'),
       meta: { title: '首页', icon: 'dashboard' }
     }]
-  },
+  }
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+
 ]
 //  动态路由
 export const syncRoutes = [approvals, attendances, departments, employees, permission, salarys, setting, social]
 //  将动态路由和静态路由合并
-const totalRoutes = [...constantRoutes, ...syncRoutes]
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
-  routes: totalRoutes
+  routes: constantRoutes
 })
 
 const router = createRouter()

@@ -15,10 +15,10 @@
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <img
-            :src="userInfo.staffPhoto"
             v-imageError="defaultImg"
+            :src="userInfo.staffPhoto"
             class="user-avatar"
-          />
+          >
           <span class="name">{{ userInfo.username }}</span>
           <i class="el-icon-caret-bottom" style="color: #fff" />
         </div>
@@ -39,34 +39,38 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import Breadcrumb from "@/components/Breadcrumb";
-import Hamburger from "@/components/Hamburger";
-
+import { mapGetters } from 'vuex'
+import Breadcrumb from '@/components/Breadcrumb'
+import Hamburger from '@/components/Hamburger'
+import { resetRouter } from '@/router'
 export default {
   components: {
     Breadcrumb,
-    Hamburger,
+    Hamburger
   },
   data() {
     return {
-      defaultImg: require("@/assets/common/head.jpg"),
-    };
+      defaultImg: require('@/assets/common/head.jpg')
+    }
   },
   computed: {
-    ...mapGetters(["sidebar", "avatar", "userInfo"]),
+    ...mapGetters(['sidebar', 'avatar', 'userInfo'])
   },
   methods: {
     toggleSideBar() {
-      this.$store.dispatch("app/toggleSideBar");
+      this.$store.dispatch('app/toggleSideBar')
     },
     async logout() {
-      this.$store.commit("user/delToken");
-      this.$store.commit("user/removeUserInfo");
-      this.$router.push("/login");
-    },
-  },
-};
+      this.$store.commit('user/delToken')
+      this.$store.commit('user/removeUserInfo')
+      this.$router.push('/login')
+      //  重置路由表
+      resetRouter()
+      //  同时需要重置vuex中的路由
+      this.$store.commit('permission/setRoutes', [])
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

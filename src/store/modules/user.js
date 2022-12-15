@@ -2,7 +2,7 @@ import { getItem, setItem, removeItem } from '@/utils/auth'
 import { login, getUserInfo, getUserDetailById } from '@/api/user'
 const state = {
   token: getItem('token'),
-  userInfo: getItem('userInfo')
+  userInfo: {}
 }
 const mutations = {
   // 更新token
@@ -26,7 +26,7 @@ const mutations = {
   }
 }
 const actions = {
-  //异步获取token
+  // 异步获取token
   async loginGetToken(context, payload) {
     const { data } = await login(payload)
     context.commit('updateToken', data)
@@ -36,6 +36,7 @@ const actions = {
     const { data } = await getUserInfo()
     const res = await getUserDetailById(data.userId)
     context.commit('updateUserInfo', { ...data, ...res.data })
+    return data
   }
 }
 

@@ -10,7 +10,7 @@
     >
       <div class="title-container">
         <h3 class="title">
-          <img src="../../assets/common/login-logo.png" alt="" />
+          <img src="../../assets/common/login-logo.png" alt="">
         </h3>
       </div>
 
@@ -55,8 +55,7 @@
         type="primary"
         style="width: 100%; margin-bottom: 30px"
         @click.native.prevent="handleLogin"
-        >登录</el-button
-      >
+      >登录</el-button>
 
       <div class="tips">
         <span style="margin-right: 20px">账号: 13800000002</span>
@@ -67,82 +66,81 @@
 </template>
 
 <script>
-import { validMobile } from "@/utils/validate";
-import { setItem } from "@/utils/auth";
+import { validMobile } from '@/utils/validate'
+import { setItem } from '@/utils/auth'
 export default {
-  name: "Login",
+  name: 'Login',
   data() {
     const validateMobile = (rule, value, callback) => {
       if (!validMobile(value)) {
-        callback(new Error("请输入正确的手机号"));
+        callback(new Error('请输入正确的手机号'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
 
     return {
       loginForm: {
-        mobile: "13800000002",
-        password: "123456",
+        mobile: '13800000002',
+        password: '123456'
       },
       loginRules: {
         mobile: [
-          { required: true, trigger: "blur" },
-          { validator: validateMobile, trigger: "blur" },
+          { required: true, trigger: 'blur' },
+          { validator: validateMobile, trigger: 'blur' }
         ],
         password: [
-          { required: true, trigger: "blur" },
+          { required: true, trigger: 'blur' },
           {
             min: 6,
             max: 16,
-            message: "密码的长度在6-16位之间 ",
-            trigger: "blur",
-          },
-        ],
+            message: '密码的长度在6-16位之间 ',
+            trigger: 'blur'
+          }
+        ]
       },
       loading: false,
-      passwordType: "password",
-      redirect: undefined,
-    };
+      passwordType: 'password',
+      redirect: undefined
+    }
   },
   watch: {
     $route: {
-      handler: function (route) {
-        this.redirect = route.query && route.query.redirect;
+      handler: function(route) {
+        this.redirect = route.query && route.query.redirect
       },
-      immediate: true,
-    },
+      immediate: true
+    }
   },
   methods: {
     showPwd() {
-      this.passwordType = this.passwordType === "password" ? "" : "password";
+      this.passwordType = this.passwordType === 'password' ? '' : 'password'
       this.$nextTick(() => {
-        this.$refs.password.focus();
-      });
+        this.$refs.password.focus()
+      })
     },
     handleLogin() {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
-          this.loading = true;
+          this.loading = true
           this.$store
-            .dispatch("user/loginGetToken", this.loginForm)
-            .then(() => {
-              this.$message.success("登录成功");
-              this.$store.dispatch("user/asyncGetUserInfo");
-              this.$router.push("/");
-              setItem("timeKey", +new Date()); //  设置时间戳用于token失效的主动拦截
+            .dispatch('user/loginGetToken', this.loginForm)
+            .then(async() => {
+              this.$message.success('登录成功')
+              this.$router.push('/')
+              setItem('timeKey', +new Date()) //  设置时间戳用于token失效的主动拦截
             })
             .catch(() => {
-              this.$message.error("登录失败");
-            });
-          this.loading = false;
+              this.$message.error('登录失败')
+            })
+          this.loading = false
         } else {
-          this.$message.error("手机号或密码格式不正确");
+          this.$message.error('手机号或密码格式不正确')
         }
-      });
-    },
-  },
-};
+      })
+    }
+  }
+}
 </script>
 
 <style lang="scss">
